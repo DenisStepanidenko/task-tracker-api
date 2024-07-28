@@ -32,3 +32,8 @@ Task
 -name (string)
 -description (string)
 -createdAt (time)
+
+-DB Entity
+-DB Entity management
+-REST API (business logic layer)
+
