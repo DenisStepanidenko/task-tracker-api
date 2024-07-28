@@ -1,0 +1,34 @@
+Project
+-Name
+-Data of creating
+-Task States
+
+Task State
+-Name
+-Data of creating
+-Ordinal
+-Task List
+
+Task
+-Name
+-Data of creating
+-Description (Full text)
+
+Project
+-id (long)
+-name (string)
+-createdAt (time)
+-taskStates (TaskState[] array)
+
+TaskState
+-id (long)
+-name (string)
+-ordinal (long)
+-createdAt (time)
+-tasks (Task[] array)
+
+Task
+-id (long)
+-name (string)
+-description (string)
+-createdAt (time)
