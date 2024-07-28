@@ -33,5 +33,6 @@ public class TaskStateEntity {
 
     @Builder.Default
     @OneToMany
+    @JoinColumn(name = "task_state_id" , referencedColumnName = "id")
     private List<TaskEntity> tasks = new ArrayList<>();
 }
