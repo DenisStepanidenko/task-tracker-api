@@ -37,3 +37,15 @@ Task
 -DB Entity management
 -REST API (business logic layer)
 
+-ProjectController
+-Создать проекты
+-Редактировать проекты
+-Удалять проект
+
+Post - создание чего-либо/запуск какой-то логики
+Get - получение какой-то информации
+Put - полная замена
+Patch - обновление
+Delete - удаление
+Post/Get/Put/Patch/Delete
+
