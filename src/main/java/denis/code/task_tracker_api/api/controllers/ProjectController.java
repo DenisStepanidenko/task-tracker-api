@@ -1,5 +1,6 @@
 package denis.code.task_tracker_api.api.controllers;
 
+import denis.code.task_tracker_api.api.controllers.helpers.ControllerHelper;
 import denis.code.task_tracker_api.api.dto.AckDto;
 import denis.code.task_tracker_api.api.dto.ProjectDto;
 import denis.code.task_tracker_api.api.exceptions.BadRequestException;
@@ -26,6 +27,8 @@ import java.util.stream.Stream;
 public class ProjectController {
     ProjectRepository projectRepository;
     ProjectDtoFactory projectDtoFactory;
+
+    ControllerHelper controllerHelper;
 
     public static final String CREATE_PROJECT = "/api/projects";
     public static final String EDIT_PROJECT = "/api/projects/{project_id}";
@@ -93,9 +96,7 @@ public class ProjectController {
         }
 
 
-        ProjectEntity project = projectRepository
-                .findById(projectId)
-                .orElseThrow(() -> new NotFoundException(String.format("Project with id=%d doesn't exists", projectId)));
+        ProjectEntity project = controllerHelper.getProjectOrThrowException(projectId);
 
 
         projectRepository
@@ -112,16 +113,17 @@ public class ProjectController {
         return projectDtoFactory.makeProjectDto(project);
     }
 
+
     @DeleteMapping(DELETE_PROJECT)
     public AckDto deleteProject(@PathVariable("project_id") Long projectId) {
 
-        projectRepository
-                .findById(projectId)
-                .orElseThrow(() -> new NotFoundException(String.format("Project with id=%d doesn't exists", projectId)));
-
+        controllerHelper.getProjectOrThrowException(projectId);
 
         projectRepository.deleteById(projectId);
 
         return AckDto.makeDefault(true);
     }
+
+
+
 }
