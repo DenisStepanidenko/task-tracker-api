@@ -19,8 +19,14 @@ public class TaskDto {
     @NonNull
     String name;
 
-    @NonNull
+
     String description;
+
+    @JsonProperty("left_task_id")
+    Long leftTaskId;
+
+    @JsonProperty("right_task_id")
+    Long rightTaskId;
 
     @NonNull
     @JsonProperty("created_at")

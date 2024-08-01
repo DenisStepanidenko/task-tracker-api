@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "task")
@@ -25,6 +26,22 @@ public class TaskEntity {
 
     private String description;
 
+    @ManyToOne
+    private TaskStateEntity taskState;
+
+    @OneToOne
+    private TaskEntity leftTaskEntity;
+
+    @OneToOne
+    private TaskEntity rightTaskEntity;
+
+    public Optional<TaskEntity> getLeftTaskEntity(){
+        return Optional.ofNullable(leftTaskEntity);
+    }
+
+    public Optional<TaskEntity> getRightTaskEntity(){
+        return Optional.ofNullable(rightTaskEntity);
+    }
     @Builder.Default
     private Instant createdAt = Instant.now();
 

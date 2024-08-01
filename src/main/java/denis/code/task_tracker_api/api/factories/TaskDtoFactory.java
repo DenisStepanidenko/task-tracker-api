@@ -13,6 +13,8 @@ public class TaskDtoFactory {
                 .name(taskEntity.getName())
                 .createdAt(taskEntity.getCreatedAt())
                 .description(taskEntity.getDescription())
+                .leftTaskId(taskEntity.getLeftTaskEntity().map(TaskEntity::getId).orElse(null))
+                .rightTaskId(taskEntity.getRightTaskEntity().map(TaskEntity::getId).orElse(null))
                 .build();
     }
 }

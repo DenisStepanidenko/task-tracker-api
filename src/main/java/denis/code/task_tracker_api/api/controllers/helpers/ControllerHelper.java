@@ -3,8 +3,10 @@ package denis.code.task_tracker_api.api.controllers.helpers;
 
 import denis.code.task_tracker_api.api.exceptions.NotFoundException;
 import denis.code.task_tracker_api.store.entities.ProjectEntity;
+import denis.code.task_tracker_api.store.entities.TaskEntity;
 import denis.code.task_tracker_api.store.entities.TaskStateEntity;
 import denis.code.task_tracker_api.store.repositories.ProjectRepository;
+import denis.code.task_tracker_api.store.repositories.TaskRepository;
 import denis.code.task_tracker_api.store.repositories.TaskStateRepository;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -21,6 +23,7 @@ public class ControllerHelper {
 
     TaskStateRepository taskStateRepository;
 
+    TaskRepository taskRepository;
 
 
     public ProjectEntity getProjectOrThrowException(Long projectId) {
@@ -33,5 +36,10 @@ public class ControllerHelper {
     public TaskStateEntity getTaskStateOrThrowException(Long taskStateId) {
         return taskStateRepository.findById(taskStateId)
                 .orElseThrow(() -> new NotFoundException(String.format("Task state with id=%d doesn't exists", taskStateId)));
+    }
+
+    public TaskEntity getTaskOrThrowException(Long taskId) {
+        return taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException(String.format("Task with id=%d doesn't exists", taskId)));
     }
 }
