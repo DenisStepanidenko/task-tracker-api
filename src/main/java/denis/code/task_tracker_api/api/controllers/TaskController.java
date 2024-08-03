@@ -2,6 +2,7 @@ package denis.code.task_tracker_api.api.controllers;
 
 
 import denis.code.task_tracker_api.api.controllers.helpers.ControllerHelper;
+import denis.code.task_tracker_api.api.dto.AckDto;
 import denis.code.task_tracker_api.api.dto.TaskDto;
 import denis.code.task_tracker_api.api.exceptions.BadRequestException;
 import denis.code.task_tracker_api.api.factories.TaskDtoFactory;
@@ -42,6 +43,8 @@ public class TaskController {
     public static final String UPDATE_TASK = "/api/task/{task_id}";
 
     public static final String CHANGE_TASK = "/api/task/{task_id}/changePosition";
+
+    public static final String DELETE_TASK = "/api/task/{task_id}";
 
     @GetMapping(GET_TASKS)
     public List<TaskDto> getTasks(@PathVariable(name = "task_state_id") Long taskStateId) {
@@ -230,17 +233,47 @@ public class TaskController {
         }
 
 
-
-
         changeTask = taskRepository.saveAndFlush(changeTask);
         optionalNewLeftTask.ifPresent(taskRepository::saveAndFlush);
         optionalNewRightTask.ifPresent(taskRepository::saveAndFlush);
 
 
-
-
-
         return taskDtoFactory.makeTaskDto(changeTask);
+    }
+
+
+    @DeleteMapping(DELETE_TASK)
+    public AckDto deleteTask(@PathVariable("task_id") Long taskId) {
+
+        TaskEntity taskToDelete = controllerHelper.getTaskOrThrowException(taskId);
+
+        Optional<TaskEntity> optionalOldLeftTask = taskToDelete.getLeftTaskEntity();
+        Optional<TaskEntity> optionalOldRightTask = taskToDelete.getRightTaskEntity();
+
+        taskToDelete.setLeftTaskEntity(null);
+        taskToDelete.setRightTaskEntity(null);
+        taskToDelete = taskRepository.saveAndFlush(taskToDelete);
+
+        optionalOldLeftTask.ifPresent(
+                it -> {
+                    it.setRightTaskEntity(optionalOldRightTask.orElse(null));
+
+                    taskRepository.saveAndFlush(it);
+                }
+        );
+
+        optionalOldRightTask.ifPresent(
+                it -> {
+                    it.setLeftTaskEntity(optionalOldLeftTask.orElse(null));
+
+                    taskRepository.saveAndFlush(it);
+                }
+        );
+
+        taskRepository.delete(taskToDelete);
+
+        return AckDto.makeDefault(true);
+
     }
 
 }
